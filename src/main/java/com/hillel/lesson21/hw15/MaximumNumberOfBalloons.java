@@ -7,19 +7,19 @@ public class MaximumNumberOfBalloons {
         if (text == null) {
             return 0;
         }
-        StringBuilder sb = new StringBuilder(text);
+        StringBuilder textBuilder = new StringBuilder(text);
         for (char letter : target.toCharArray()) {
-            if (sb.toString().contains(String.valueOf(letter))) {
-                sb.deleteCharAt(sb.indexOf(String.valueOf(letter)));
+            if (textBuilder.toString().contains(String.valueOf(letter))) {
+                textBuilder.deleteCharAt(textBuilder.indexOf(String.valueOf(letter)));
             } else {
                 return targetCount;
             }
         }
         targetCount++;
-        if (sb.toString().length() < target.length()) {
+        if (textBuilder.toString().length() < target.length()) {
             return targetCount;
         } else {
-            maxNumberOfBalloons(sb.toString());
+            maxNumberOfBalloons(textBuilder.toString());
         }
         return targetCount;
     }
