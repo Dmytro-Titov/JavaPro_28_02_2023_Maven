@@ -8,10 +8,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class QuestionRepositoryImpl implements QuestionRepository {
     private final Connection connection;
-    private static final String get = "SELECT * from question where id = ?";
+    private static final String get = "SELECT * FROM question WHERE id = ?";
+    private static final String getAll = "SELECT * FROM question";
+    private static final String getAllByTopic = "SELECT * FROM question WHERE topic_id = ?";
     private static final String save = "INSERT INTO public.question(text, topic_id) VALUES (?, ?)";
     private static final String remove = "DELETE FROM public.question WHERE id = ?";
     private static final String update = "UPDATE public.question SET text = ?, topic_id = ? WHERE id = ?";
@@ -62,6 +66,37 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             statement.setInt(2, question.getTopicId());
             statement.setInt(3, question.getId());
             return statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Question> getAll() {
+        List<Question> all = new ArrayList<>();
+        try (PreparedStatement statement = this.connection.prepareStatement(getAll)) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                all.add(new Question(resultSet.getInt("id"), resultSet.getString("text"),
+                        resultSet.getInt("topic_id")));
+            }
+            return all;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Question> getAllByTopic(int topicId) {
+        List<Question> allByTopic = new ArrayList<>();
+        try (PreparedStatement statement = this.connection.prepareStatement(getAllByTopic)) {
+            statement.setInt(1, topicId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                allByTopic.add(new Question(resultSet.getInt("id"), resultSet.getString("text"),
+                        resultSet.getInt("topic_id")));
+            }
+            return allByTopic;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
