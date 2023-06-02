@@ -39,4 +39,13 @@ public class Question {
     public void setTopicId(int topicId) {
         this.topicId = topicId;
     }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", topicId=" + topicId +
+                '}';
+    }
 }
