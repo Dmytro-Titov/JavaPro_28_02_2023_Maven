@@ -32,7 +32,7 @@ public class UserApp {
         } while (option != 7);
     }
 
-    public static void implementOption(Scanner scanner, int option) {
+    private static void implementOption(Scanner scanner, int option) {
         TopicService topicService = new TopicService(new TopicRepositoryImpl());
         QuestionService questionService = new QuestionService(new QuestionRepositoryImpl());
         switch (option) {
