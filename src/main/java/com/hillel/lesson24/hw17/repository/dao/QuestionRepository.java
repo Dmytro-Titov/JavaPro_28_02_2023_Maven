@@ -5,13 +5,14 @@ import com.hillel.lesson24.hw17.model.Question;
 import java.util.List;
 
 public interface QuestionRepository {
-    boolean save(Question question);
+    Question save(Question question);
 
     Question get(int id);
 
-    boolean remove(int id);
+    Question remove(int id);
 
     int update(Question question);
     List<Question> getAll();
-    List<Question> getAllByTopic(int topicId);
+    List<Question> getAllByTopicId(int topicId);
+    List<Question> getAllByTopicName(String topicName);
 }

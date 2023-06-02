@@ -33,10 +33,8 @@ public class TopicServiceTest {
     @Test
     public void add() {
         init();
-        int expected = topicsMock.size() + 1;
-        Topic topic = new Topic(7, "Dancing");
-        topicsMock.add(topic);
-        int actual = topicsMock.size();
+        Topic expected = new Topic(7, "Dancing");
+        Topic actual = topicService.add(expected);
         Assert.assertEquals(expected, actual);
     }
 }

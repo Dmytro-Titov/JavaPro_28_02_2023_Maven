@@ -1,6 +1,7 @@
 package com.hillel.lesson24.hw17.mock;
 
 import com.hillel.lesson24.hw17.model.Question;
+import com.hillel.lesson24.hw17.model.Topic;
 import com.hillel.lesson24.hw17.repository.dao.QuestionRepository;
 
 import java.util.ArrayList;
@@ -16,8 +17,9 @@ public class QuestionRepositoryMock {
     public QuestionRepository getMock() {
         return new QuestionRepository() {
             @Override
-            public boolean save(Question question) {
-                return questionsMock.add(question);
+            public Question save(Question question) {
+                questionsMock.add(question);
+                return question;
             }
 
             @Override
@@ -31,13 +33,15 @@ public class QuestionRepositoryMock {
             }
 
             @Override
-            public boolean remove(int id) {
+            public Question remove(int id) {
                 for (Question question : questionsMock) {
                     if (question.getId() == id) {
-                        return questionsMock.remove(question);
+                        Question removedQuestion = question;
+                        questionsMock.remove(question);
+                        return removedQuestion;
                     }
                 }
-                return false;
+                return null;
             }
 
             @Override
@@ -58,11 +62,32 @@ public class QuestionRepositoryMock {
             }
 
             @Override
-            public List<Question> getAllByTopic(int topicId) {
+            public List<Question> getAllByTopicId(int topicId) {
                 List<Question> allByTopic = new ArrayList<>();
                 for (Question question : questionsMock) {
                     if (question.getTopicId() == topicId) {
                         allByTopic.add(question);
+                    }
+                }
+                return allByTopic;
+            }
+
+            @Override
+            public List<Question> getAllByTopicName(String topicName) {
+                List<Topic> topics = new ArrayList<>();
+                topics.add(new Topic(1, "Math"));
+                topics.add(new Topic(2, "History"));
+                topics.add(new Topic(3, "Linguistics"));
+
+                List<Question> allByTopic = new ArrayList<>();
+                for (Topic topic : topics) {
+                    if (topic.getName().equals(topicName)) {
+                        for (Question question : questionsMock) {
+                            if (question.getTopicId() == topic.getId()) {
+                                allByTopic.add(question);
+                            }
+                        }
+                        break;
                     }
                 }
                 return allByTopic;
