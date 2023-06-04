@@ -15,8 +15,9 @@ public class TopicRepositoryMock {
     public TopicRepository getMock() {
         return new TopicRepository() {
             @Override
-            public boolean save(Topic topic) {
-                return topicsMock.add(topic);
+            public Topic save(Topic topic) {
+                topicsMock.add(topic);
+                return topic;
             }
 
             @Override
@@ -30,13 +31,15 @@ public class TopicRepositoryMock {
             }
 
             @Override
-            public boolean remove(int id) {
+            public Topic remove(int id) {
                 for (Topic topic : topicsMock) {
                     if (topic.getId() == id) {
-                        return topicsMock.remove(topic);
+                        Topic removedTopic = topic;
+                        topicsMock.remove(topic);
+                        return removedTopic;
                     }
                 }
-                return false;
+                return null;
             }
 
             @Override
@@ -48,6 +51,11 @@ public class TopicRepositoryMock {
                     }
                 }
                 return 0;
+            }
+
+            @Override
+            public List<Topic> getAll() {
+                return topicsMock;
             }
         };
     }

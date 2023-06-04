@@ -14,8 +14,9 @@ public class SingletonConnection {
         try {
             connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Hillel", name, password);
         } catch (SQLException e) {
-            System.err.println("Error occurred during creation of singleton connection instance");
-            throw new RuntimeException(e);
+            System.err.println("Cannot connect to database");
+            e.printStackTrace();
+            System.exit(1);
         }
     }
 
