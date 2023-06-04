@@ -16,19 +16,16 @@ public class UserApp {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Hello, User!");
         do {
-            while (true) {
-                showMenu();
-                if (scanner.hasNextInt()) {
-                    option = scanner.nextInt();
-                    scanner.nextLine();
-                    if (option >= 1 && option <= 7) {
-                        break;
-                    }
-                } else {
-                    scanner.nextLine();
+            showMenu();
+            if (!scanner.hasNextInt()) {
+                scanner.nextLine();
+            } else {
+                option = scanner.nextInt();
+                scanner.nextLine();
+                if (option >= 1 && option <= 7) {
+                    implementOption(scanner, option);
                 }
             }
-            implementOption(scanner, option);
         } while (option != 7);
     }
 
@@ -36,18 +33,18 @@ public class UserApp {
         TopicService topicService = new TopicService(new TopicRepositoryImpl());
         QuestionService questionService = new QuestionService(new QuestionRepositoryImpl());
         switch (option) {
-            case 1:
+            case 1 -> {
                 System.out.println("Enter the name of topic from which you want to get a question:");
                 topicService.printTopicNames();
                 String name = scanner.nextLine();
                 System.out.println(questionService.getRandomByTopicName(name));
                 System.out.println();
-                break;
-            case 2:
+            }
+            case 2 -> {
                 System.out.println(questionService.getRandom());
                 System.out.println();
-                break;
-            case 3:
+            }
+            case 3 -> {
                 System.out.println("Enter a new question:");
                 String questionText = scanner.nextLine();
                 System.out.println("Choose the correct topic id from the list below. Use integers only:");
@@ -55,27 +52,25 @@ public class UserApp {
                 int topicId = scanner.nextInt();
                 Question question = new Question(questionText, topicId);
                 questionService.add(question);
-                break;
-            case 4:
+            }
+            case 4 -> {
                 System.out.println("Enter id of question you want to delete. Use integers only:");
                 questionService.printAll();
                 int questionId = scanner.nextInt();
                 questionService.remove(questionId);
-                break;
-            case 5:
+            }
+            case 5 -> {
                 System.out.println("Here is the list of available topics:");
                 topicService.printAll();
                 System.out.println();
-                break;
-            case 6:
+            }
+            case 6 -> {
                 System.out.println("Enter a new topic name:");
                 String topicName = scanner.nextLine();
                 Topic topic = new Topic(topicName);
                 topicService.add(topic);
-                break;
-            case 7:
-                System.out.println("Goodbye!");
-                break;
+            }
+            case 7 -> System.out.println("Goodbye!");
         }
     }
 
