@@ -16,19 +16,19 @@ public class OrderService {
         orders.add(Order.builder()
                 .id(1)
                 .date(LocalDate.of(2021, 3, 11))
-                .cost(455.0)
+                .cost(0.0)
                 .products(new ArrayList<>())
                 .build());
         orders.add(Order.builder()
                 .id(2)
                 .date(LocalDate.of(2022, 10, 15))
-                .cost(600.0)
+                .cost(0.0)
                 .products(new ArrayList<>())
                 .build());
         orders.add(Order.builder()
                 .id(3)
                 .date(LocalDate.of(2023, 6, 14))
-                .cost(950.0)
+                .cost(0.0)
                 .products(new ArrayList<>())
                 .build());
     }
@@ -50,6 +50,8 @@ public class OrderService {
     public Order addOrder(Order order) {
         int index = orders.size() + 1;
         order.setId(index);
+        double sum = calculateCost(order);
+        order.setCost(sum);
         orders.add(order);
         return order;
     }
@@ -64,7 +66,7 @@ public class OrderService {
         for (Order order : orders) {
             if (order.getId() == updatedOrder.getId()) {
                 order.setDate(updatedOrder.getDate());
-                order.setCost(updatedOrder.getCost());
+                order.setCost(calculateCost(updatedOrder));
                 order.setProducts(updatedOrder.getProducts());
             }
         }
@@ -78,6 +80,7 @@ public class OrderService {
 
     public Product addProduct(int orderId, Product product) {
         Order order = getById(orderId);
+        order.setCost(order.getCost() + product.getCost());
         List<Product> products = order.getProducts();
         int productIndex = products.size() + 1;
         product.setId(productIndex);
@@ -93,22 +96,33 @@ public class OrderService {
         for (Product product : products) {
             if (product.getId() == productId) {
                 removedProduct = product;
+                order.setCost(order.getCost() - product.getCost());
                 products.remove(product);
             }
         }
         return removedProduct;
     }
 
-    public Product updateProduct(int orderId, Product product) {
+    public Product updateProduct(int orderId, Product newProduct) {
         Order order = getById(orderId);
         List<Product> products = order.getProducts();
         for (Product oldProduct : products) {
-            if (oldProduct.getId() == product.getId()) {
-                oldProduct.setName(product.getName());
-                oldProduct.setCost(product.getCost());
+            if (oldProduct.getId() == newProduct.getId()) {
+                order.setCost(order.getCost() - oldProduct.getCost() + newProduct.getCost());
+                oldProduct.setName(newProduct.getName());
+                oldProduct.setCost(newProduct.getCost());
             }
         }
-        return product;
+        return newProduct;
+    }
+    private double calculateCost(Order order) {
+        List<Product> products = order.getProducts();
+        double sum = 0.0;
+        if (!products.isEmpty()) {
+            for (Product product : products) {
+                sum += product.getCost();
+            }
+        } return sum;
     }
 
 }
