@@ -23,43 +23,32 @@ public class OrderController {
         return orderService.getAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public Order getById(@PathVariable int id) {
         return orderService.getById(id);
+    }
+    @GetMapping("/username/{username}")
+    public Order getByUsername(@PathVariable String username) {
+        return orderService.getByUsername(username);
     }
 
     @PostMapping
     public Order addOrder(@RequestBody Order order) {
-        return orderService.addOrder(order);
+        return orderService.add(order);
     }
 
-    @DeleteMapping("/{id}")
-    public Order removeOrder(@PathVariable int id) {
-        return orderService.removeOrder(id);
+    @GetMapping("/id/{orderId}/products")
+    public List<Product> getAllProductsByOrderId(@PathVariable int orderId) {
+        return orderService.getAllProductsByOrderId(orderId);
     }
 
-    @PutMapping
-    public Order updateOrder(@RequestBody Order order) {
-        return orderService.updateOrder(order);
-    }
-
-    @GetMapping("/{orderId}/products")
-    public List<Product> getAllByOrderId(@PathVariable int orderId) {
-        return orderService.getAllByOrderId(orderId);
+    @GetMapping("/username/{username}/products")
+    public List<Product> getAllProductsByUsername(@PathVariable String username) {
+        return orderService.getAllProductsByUsername(username);
     }
 
     @PostMapping("/{orderID}/products")
-    public Product addProduct(@PathVariable int orderID, @RequestBody Product product) {
-        return orderService.addProduct(orderID, product);
-    }
-
-    @DeleteMapping("/{orderId}/products/{productId}")
-    public Product removeProduct(@PathVariable int orderId, @PathVariable int productId) {
-        return orderService.removeProduct(orderId, productId);
-    }
-
-    @PutMapping("/{orderId}/products")
-    public Product updateProduct(@PathVariable int orderId, @RequestBody Product product) {
-        return orderService.updateProduct(orderId, product);
+    public Product addProductToOrder(@PathVariable int orderID, @RequestBody Product product) {
+        return orderService.addProductToOrder(orderID, product);
     }
 }
