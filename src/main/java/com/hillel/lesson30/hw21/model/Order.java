@@ -14,7 +14,10 @@ import java.util.List;
 @NoArgsConstructor
 public class Order {
     private int id;
+    private String name;
     private LocalDate date;
-    private double cost;
+
     private List<Product> products;
+    private double cost;
+
 }
