@@ -37,10 +37,13 @@ public class OrderService {
     public OrderDto add(OrderDto orderDto) {
         Order order = Converter.toOrder(orderDto);
         order = orderRepository.save(order);
-        List<ProductDto> products = orderDto.getProducts();
-        for (ProductDto productDto : products) {
-            productRepository.save(Converter.toProduct(order.getId(), productDto));
+        List<ProductDto> productDtos = orderDto.getProducts();
+        List<Product> products = new ArrayList<>();
+        for (ProductDto productDto : productDtos) {
+            Product product = Converter.toProduct(order.getId(), productDto);
+            productRepository.save(product);
+            products.add(product);
         }
-        return getById(order.getId());
+        return Converter.toOrderDto(order, products);
     }
 }
