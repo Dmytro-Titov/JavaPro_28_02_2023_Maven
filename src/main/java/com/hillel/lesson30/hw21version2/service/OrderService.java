@@ -29,7 +29,7 @@ public class OrderService {
         List<Order> orders = orderRepository.findAll();
         List<OrderDto> orderDtos = new ArrayList<>();
         for (Order order : orders) {
-            orderDtos.add(getById(order.getId()));
+            orderDtos.add(Converter.toOrderDto(order, productRepository.findByOrderId(order.getId())));
         }
         return orderDtos;
     }
