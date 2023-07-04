@@ -40,9 +40,8 @@ public class OrderService {
         List<ProductDto> productDtos = orderDto.getProducts();
         List<Product> products = new ArrayList<>();
         for (ProductDto productDto : productDtos) {
-            Product product = Converter.toProduct(order.getId(), productDto);
-            productRepository.save(product);
-            products.add(product);
+            Product savedProduct = productRepository.save(Converter.toProduct(order.getId(), productDto));
+            products.add(savedProduct);
         }
         return Converter.toOrderDto(order, products);
     }
